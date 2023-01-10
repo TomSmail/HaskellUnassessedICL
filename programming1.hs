@@ -1,7 +1,6 @@
 import Data.Char (ord, chr, intToDigit, isSpace)
 import Data.List
 import qualified Data.Map as Map
-import Distribution.Simple (VersionRange)
 
 func :: Int -> Bool
 func x = ('a', x, (3, 'b')) < ('b', 5, (3, 'c'))
@@ -171,6 +170,34 @@ remove key table = [(x,y) | (x,y) <- table, key /= x]
 
 remove' :: Eq a => a -> [(a, b)] -> [(a, b)]
 remove' key  = filter (\(x,y) -> x /= key) 
+
+-- 3.2.3 
+quicksort :: [Int] -> [Int]
+quicksort [] = []
+quicksort (x:xs)
+    = small ++ [x] ++ big
+    where 
+        small = quicksort [y | y <- xs, x > y]
+        big = quicksort [y | y <- xs, y >= x]
+    
+-- 3.2.4
+-- edited to n-1 -> n so that substrings can use this function
+allSplits :: [a] -> [([a], [a])]
+allSplits xs 
+    = [splitAt i xs | i <- [1..n]]
+    where n = length xs
+
+-- 3.2.5
+prefixes :: [t] -> [[t]]
+prefixes [] = [[]]
+prefixes xs 
+    = map fst (allSplits xs)
+
+-- 3.2.6
+substrings :: String -> [String]
+substrings [] = []
+substrings xxs@(x:xs)
+    = prefixes xxs ++ substrings xs 
 
 -- 4.2
 allSame :: [Int] -> Bool
